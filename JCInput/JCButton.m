@@ -17,6 +17,8 @@
     @property BOOL wasRead;
     @property BOOL isOn;
     @property BOOL isTurbo;
+    @property BOOL isRapidFire;
+    @property BOOL isDown;
 @end
 
 @implementation JCButton
@@ -24,7 +26,7 @@
 -(id)initWithButtonRadius:(float)buttonRadious
                     color:(SKColor *)color
              pressedColor:(SKColor *)pressedColor
-                  isTurbo:(BOOL)isTurbo
+                  isTurbo:(BOOL)isTurbo isRapidFire:(BOOL)isRapid
 
 {
     if((self = [super init]))
@@ -36,6 +38,8 @@
         self.isTurbo = isTurbo;
         self.isOn = NO;
         self.wasRead = NO;
+        self.isDown = NO;
+        self.isRapidFire = isRapid;
         [self setUserInteractionEnabled:YES];
         CGMutablePathRef circlePath = CGPathCreateMutable();
         CGPathAddEllipseInRect(circlePath , NULL , CGRectMake(self.position.x-self.buttonRadius, self.position.y-self.buttonRadius, self.buttonRadius*2, self.buttonRadius*2) );
@@ -55,6 +59,7 @@
         self.onlyTouch = [touches anyObject];
         self.isOn = YES;
         self.wasRead = NO;
+        self.isDown = YES;
         self.fillColor = self.pressedColor;
     }
 }
@@ -84,6 +89,7 @@
         if (self.wasRead) {
             self.isOn = NO;
         }
+        self.isDown = NO;
         self.fillColor = self.color;
         self.onlyTouch = nil;
     }
@@ -106,6 +112,9 @@
 -(BOOL)wasPressed
 {
     self.wasRead = YES;
+    if(self.isRapidFire && self.isDown){
+        return YES;
+    }
     if (self.isOn) {
         if (!self.isTurbo) {
             self.isOn = NO;
