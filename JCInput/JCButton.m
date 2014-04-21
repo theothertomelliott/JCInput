@@ -78,6 +78,7 @@
                 self.isOn = NO;
             }
         }
+        self.isDown = NO;
         self.fillColor = self.color;
     }
 }
